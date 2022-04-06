@@ -1,6 +1,6 @@
 ---
 - name: Gather os specific variables
-  include_vars: "{{ lookup('first_found', items) }}"
+  ansible.builtin.include_vars: "{{ lookup('first_found', items) }}"
   vars:
     items:
       files:
@@ -11,17 +11,17 @@
       - ./vars
 
 - name: Ensure sudo is installed
-  package:
+  ansible.builtin.package:
     name: sudo
     state: present
 
 - name: Ensure admin group exists
-  group:
+  ansible.builtin.group:
     name: "{{ sudo_admin_group_name }}"
     state: present
 
 - name: Add users to admin group
-  user:
+  ansible.builtin.user:
     name: "{{ item.username }}"
     append: yes
     groups: "{{ sudo_admin_group_name }}"
@@ -32,7 +32,7 @@
         (item.is_admin_group)
 
 - name: Create sudoers file
-  template:
+  ansible.builtin.template:
     src: "etc/sudoers.j2"
     dest: "/etc/sudoers"
     validate: visudo -cf %s
